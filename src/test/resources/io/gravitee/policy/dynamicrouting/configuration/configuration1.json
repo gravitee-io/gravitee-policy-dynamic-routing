@@ -1,0 +1,8 @@
+{
+  "rules": [
+    {
+      "pattern": "totototo",
+      "url": "http://localhost/product"
+    }
+  ]
+}

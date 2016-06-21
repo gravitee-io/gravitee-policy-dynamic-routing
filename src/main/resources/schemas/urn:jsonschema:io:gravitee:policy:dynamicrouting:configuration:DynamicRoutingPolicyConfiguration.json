@@ -1,0 +1,36 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:io:gravitee:policy:dynamicrouting:configuration:DynamicRoutingPolicyConfiguration",
+  "title": "Dynamic Routing",
+  "description": "Route request to an other endpoint according to specified rules",
+  "properties" : {
+    "rules" : {
+      "title": "Routing rules",
+      "description": "Ordered list of rules to apply to inbound request.",
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "id" : "urn:jsonschema:io:gravitee:policy:dynamicrouting:configuration:Rule",
+        "properties" : {
+          "pattern" : {
+            "title": "Match expression",
+            "description": "The key used to store the element (support EL).",
+            "type" : "string"
+          },
+          "url" : {
+            "title": "Redirect to",
+            "description": "The target endpoint (support EL).",
+            "type" : "string"
+          }
+        },
+        "required": [
+          "pattern",
+          "url"
+        ]
+      }
+    },
+    "required": [
+      "rules"
+    ]
+  }
+}
