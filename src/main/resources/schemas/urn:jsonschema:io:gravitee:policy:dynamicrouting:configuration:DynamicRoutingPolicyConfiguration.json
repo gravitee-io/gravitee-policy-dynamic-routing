@@ -10,6 +10,7 @@
       "type" : "array",
       "items" : {
         "type" : "object",
+        "title": "Rule",
         "id" : "urn:jsonschema:io:gravitee:policy:dynamicrouting:configuration:Rule",
         "properties" : {
           "pattern" : {
@@ -28,9 +29,9 @@
           "url"
         ]
       }
-    },
-    "required": [
-      "rules"
-    ]
-  }
+    }
+  },
+  "required": [
+    "rules"
+  ]
 }
