@@ -17,7 +17,6 @@ package io.gravitee.policy.dynamicrouting.configuration;
 
 import io.gravitee.policy.api.PolicyConfiguration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ import java.util.List;
  */
 public class DynamicRoutingPolicyConfiguration implements PolicyConfiguration {
 
-    private List<Rule> rules = new ArrayList<>();
+    private List<Rule> rules;
 
     public List<Rule> getRules() {
         return rules;

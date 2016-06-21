@@ -79,8 +79,28 @@ public class DynamicRoutingPolicyTest {
         when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/ecom/");
 
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).doNext(request, response);
+    }
+
+    @Test
+    public void test_shouldDynamicRouting_noMatchingRule() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule(Pattern.compile("/mag/"), "http://host1/product"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        final HttpHeaders headers = new HttpHeaders();
+        when(request.headers()).thenReturn(headers);
+        when(request.path()).thenReturn("/products/v1/ecom/");
+
         // Prepare context
-        when(executionContext.getAttribute(ExecutionContext.ATTR_RESOLVED_PATH)).thenReturn("/ecom/");
+        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -93,7 +113,7 @@ public class DynamicRoutingPolicyTest {
     public void test_shouldDynamicRouting_singleMatchingRule() {
         // Prepare policy configuration
         List<Rule> rules = new ArrayList<>();
-        rules.add(new Rule(Pattern.compile("/ecom/"), "http://host1/product"));
+        rules.add(new Rule(Pattern.compile("/products/v1/ecom/"), "http://host1/product"));
 
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
@@ -103,7 +123,6 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
-        when(executionContext.getAttribute(ExecutionContext.ATTR_RESOLVED_PATH)).thenReturn("/ecom/");
         when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
 
         // Execute policy
@@ -118,8 +137,8 @@ public class DynamicRoutingPolicyTest {
     public void test_shouldDynamicRouting_multipleMatchingRule() {
         // Prepare policy configuration
         List<Rule> rules = new ArrayList<>();
-        rules.add(new Rule(Pattern.compile("/ecom/"), "http://host1/product"));
-        rules.add(new Rule(Pattern.compile("/ecom/subpath"), "http://host2/product"));
+        rules.add(new Rule(Pattern.compile("/products/v1/ecom/"), "http://host1/product"));
+        rules.add(new Rule(Pattern.compile("/products/v1/ecom/subpath"), "http://host2/product"));
 
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
@@ -129,7 +148,6 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
-        when(executionContext.getAttribute(ExecutionContext.ATTR_RESOLVED_PATH)).thenReturn("/ecom/");
         when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
 
         // Execute policy
@@ -144,8 +162,8 @@ public class DynamicRoutingPolicyTest {
     public void test_shouldDynamicRouting_multipleMatchingRule_regex() {
         // Prepare policy configuration
         List<Rule> rules = new ArrayList<>();
-        rules.add(new Rule(Pattern.compile("/ecome.*"), "http://host1/product"));
-        rules.add(new Rule(Pattern.compile("/ecom/(.*)"), "http://host2/product"));
+        rules.add(new Rule(Pattern.compile("/products/v1/ecome.*"), "http://host1/product"));
+        rules.add(new Rule(Pattern.compile("/products/v1/ecom/(.*)"), "http://host2/product"));
 
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
@@ -155,7 +173,6 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
-        when(executionContext.getAttribute(ExecutionContext.ATTR_RESOLVED_PATH)).thenReturn("/ecom/");
         when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
 
         // Execute policy
@@ -170,8 +187,8 @@ public class DynamicRoutingPolicyTest {
     public void test_shouldDynamicRouting_multipleMatchingRule_transformEndpoint() {
         // Prepare policy configuration
         List<Rule> rules = new ArrayList<>();
-        rules.add(new Rule(Pattern.compile("/ecome.*"), "http://host1/product"));
-        rules.add(new Rule(Pattern.compile("/ecom/(.*)"), "http://host2/product/{#group_0}"));
+        rules.add(new Rule(Pattern.compile("/products/v1/ecome.*"), "http://host1/product"));
+        rules.add(new Rule(Pattern.compile("/products/v1/ecom/(.*)"), "http://host2/product/{#group_0}"));
 
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
@@ -181,7 +198,6 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/search");
 
         // Prepare context
-        when(executionContext.getAttribute(ExecutionContext.ATTR_RESOLVED_PATH)).thenReturn("/ecom/search");
         when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
 
         // Execute policy

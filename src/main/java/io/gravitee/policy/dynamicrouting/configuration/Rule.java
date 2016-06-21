@@ -32,7 +32,6 @@ public final class Rule {
     private String url;
 
     public Rule() {
-
     }
 
     public Rule(Pattern pattern, String url) {
