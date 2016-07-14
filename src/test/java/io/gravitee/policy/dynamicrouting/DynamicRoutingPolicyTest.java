@@ -215,4 +215,29 @@ public class DynamicRoutingPolicyTest {
         verify(policyChain).doNext(request, response);
         verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, "http://host2/product/search");
     }
+
+    @Test
+    public void test_shouldDynamicRouting_multipleMatchingRule_transformEndpointWithGroupName() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule(Pattern.compile("/api/(?<version>v[0-9]+)/ecome.*"), "http://host1/products/api/{#groupName['version']}/{#group[0]}"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        final HttpHeaders headers = new HttpHeaders();
+        when(request.headers()).thenReturn(headers);
+        when(request.path()).thenReturn("/products/api/v12/ecome");
+
+        // Prepare context
+        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
+
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).doNext(request, response);
+        verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, "http://host1/products/api/v12/v12");
+    }
 }

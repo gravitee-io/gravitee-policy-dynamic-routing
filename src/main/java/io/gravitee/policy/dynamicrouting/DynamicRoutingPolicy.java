@@ -27,8 +27,13 @@ import io.gravitee.policy.dynamicrouting.configuration.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author David BRASSELY (david at gravitee.io)
@@ -40,6 +45,8 @@ public class DynamicRoutingPolicy {
      * LOGGER
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicRoutingPolicy.class);
+
+    private final static Pattern GROUP_NAME_PATTERN = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>");
 
     /**
      * The associated configuration to this Policy
@@ -80,11 +87,18 @@ public class DynamicRoutingPolicy {
                 // Required to calculate capture groups
                 match.matches();
 
+                // Extract capture group by index
                 String [] groups = new String[match.groupCount()];
                 for (int idx = 0; idx < match.groupCount(); idx++) {
                     groups[idx] = match.group(idx + 1);
                 }
                 executionContext.getTemplateEngine().getTemplateContext().setVariable("group", groups);
+
+                // Extract capture group by name
+                Set<String> extractedGroupNames = getNamedGroupCandidates(rule.getPattern().pattern());
+                Map<String, String> groupNames = extractedGroupNames.stream().collect(
+                        Collectors.toMap(groupName -> groupName, match::group));
+                executionContext.getTemplateEngine().getTemplateContext().setVariable("groupName", groupNames);
 
                 // Given endpoint can be defined as the template using EL
                 LOGGER.debug("Transform endpoint {} using template engine", endpoint);
@@ -99,11 +113,22 @@ public class DynamicRoutingPolicy {
             } else {
                 LOGGER.warn("No defined rule is matching path {}", subPath);
                 // No rule is matching request path
-                policyChain.failWith(PolicyResult.failure(HttpStatusCode.BAD_REQUEST_400, "No defined rule is matching path"));
+                policyChain.failWith(PolicyResult.failure(HttpStatusCode.BAD_REQUEST_400, "No routing rule is matching path"));
             }
         } else {
             // No rule defined
             policyChain.doNext(request, response);
         }
+    }
+
+    private Set<String> getNamedGroupCandidates(String regex) {
+        Set<String> namedGroups = new TreeSet<>();
+        Matcher m = GROUP_NAME_PATTERN.matcher(regex);
+
+        while (m.find()) {
+            namedGroups.add(m.group(1));
+        }
+
+        return namedGroups;
     }
 }
