@@ -12,6 +12,7 @@ endif::[]
 
 | X
 |
+
 |===
 
 == Description
@@ -19,11 +20,6 @@ endif::[]
 
 
 == Configuration
-
-You can configure the policy with the following options :
-
-|===
-
 
 [source, json]
 .Configuration example
