@@ -21,7 +21,7 @@ import io.gravitee.policy.dynamicrouting.configuration.jackson.PatternDeserializ
 import java.util.regex.Pattern;
 
 /**
- * @author David BRASSELY (david at gravitee.io)
+ * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
 public final class Rule {

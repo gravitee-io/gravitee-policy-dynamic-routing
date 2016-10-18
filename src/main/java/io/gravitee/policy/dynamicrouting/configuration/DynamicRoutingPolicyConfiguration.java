@@ -20,7 +20,7 @@ import io.gravitee.policy.api.PolicyConfiguration;
 import java.util.List;
 
 /**
- * @author David BRASSELY (david at gravitee.io)
+ * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
 public class DynamicRoutingPolicyConfiguration implements PolicyConfiguration {
