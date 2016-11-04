@@ -7,34 +7,77 @@ endif::[]
 
 == Phase
 
+[cols="2*", options="header"]
 |===
-|onRequest |onResponse
+^|onRequest
+^|onResponse
 
-| X
-|
+^.^| X`
+^.^|
 
 |===
 
 == Description
 
+The dynamic routing policy is used to dispatch inbound calls to different targets / endpoints or to rewrite URIs.
 
+This policy can be particularly useful when user needs to prepare a _mashup_ of APIs into a single one.
+
+An other typical use-case will be to define this kind of routing:
+
+* Requests from `http://gateway/apis/store/12/info` are redirected to `http://backend_store12/info`
+* Requests from `http://gateway/apis/store/45/info` are redirected to `http://backend_store45/info`
+
+
+== Attributes
+
+|===
+|Name |Description
+
+.^|request.endpoint
+|The endpoint URL invoked by the gateway after dynamic routing.
+
+|===
 
 == Configuration
+
+When using the Dynamic Routing policy, you can define multiple rules and their respective redirections according to the
+initial request path.
+
+WARNING: When defining rule, please consider that the API's context-path must be part
+ of the rule's path.
+
+=== Regular expressions
+Rules can be defined using regular expression: `/v1/stores/(.*)`.
+
+Using regular expressions can be very useful when you want to capture some parts of the initial request path and reuse
+them to define the redirection.
+
+For example: the rule's path is `/v1/stores/(.*)` to capture the end of the path after `/v1/stores/` and use it
+in the _redirect to_ property: `\http://store_backend/stores/{#group[0]}`
+
+An other great feature is the possibility to use named group instead of indexed group.
+`/api/(?<store>v[0-9]+)/stores.*` => `\http://host1/products/api/{#groupName['version']}`
 
 [source, json]
 .Configuration example
 ----
 "dynamic-routing": {
-
+    "rules": [
+        {
+            "pattern": "/v1/stores/(.*)",
+            "url": "http://host2/stores/{#group[0]}"
+        }
+    ]
 }
 ----
 
 == Http Status Code
-
+`
 |===
 |Code |Message
 
-| ```400```
-| If no rule match the inbound request
+.^| ```400```
+| When no rule match the inbound request
 
 |===

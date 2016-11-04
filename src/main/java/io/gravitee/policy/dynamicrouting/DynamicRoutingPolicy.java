@@ -48,6 +48,9 @@ public class DynamicRoutingPolicy {
 
     private final static Pattern GROUP_NAME_PATTERN = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>");
 
+    private final static String GROUP_ATTRIBUTE = "group";
+    private final static String GROUP_NAME_ATTRIBUTE = "groupName";
+
     /**
      * The associated configuration to this Policy
      */
@@ -92,13 +95,13 @@ public class DynamicRoutingPolicy {
                 for (int idx = 0; idx < match.groupCount(); idx++) {
                     groups[idx] = match.group(idx + 1);
                 }
-                executionContext.getTemplateEngine().getTemplateContext().setVariable("group", groups);
+                executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_ATTRIBUTE, groups);
 
                 // Extract capture group by name
                 Set<String> extractedGroupNames = getNamedGroupCandidates(rule.getPattern().pattern());
                 Map<String, String> groupNames = extractedGroupNames.stream().collect(
                         Collectors.toMap(groupName -> groupName, match::group));
-                executionContext.getTemplateEngine().getTemplateContext().setVariable("groupName", groupNames);
+                executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_NAME_ATTRIBUTE, groupNames);
 
                 // Given endpoint can be defined as the template using EL
                 LOGGER.debug("Transform endpoint {} using template engine", endpoint);
