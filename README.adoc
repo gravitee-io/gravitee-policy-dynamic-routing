@@ -5,6 +5,7 @@ image:https://ci.gravitee.io/buildStatus/icon?job=gravitee-io/gravitee-policy-dy
 image:https://badges.gitter.im/Join Chat.svg["Gitter", link="https://gitter.im/gravitee-io/gravitee-io?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
 endif::[]
 
+
 == Phase
 
 [cols="2*", options="header"]
@@ -12,13 +13,13 @@ endif::[]
 ^|onRequest
 ^|onResponse
 
-^.^| X`
+^.^| X
 ^.^|
 
 |===
 
-== Description
 
+== Description
 The dynamic routing policy is used to dispatch inbound calls to different targets / endpoints or to rewrite URIs.
 
 This policy can be particularly useful when user needs to prepare a _mashup_ of APIs into a single one.
@@ -39,13 +40,13 @@ An other typical use-case will be to define this kind of routing:
 
 |===
 
-== Configuration
 
+== Configuration
 When using the Dynamic Routing policy, you can define multiple rules and their respective redirections according to the
 initial request path.
 
-WARNING: When defining rule, please consider that the API's context-path must be part
- of the rule's path.
+WARNING: When defining rule, please consider that the API's context-path must not be part of the rule's path!
+
 
 === Regular expressions
 Rules can be defined using regular expression: `/v1/stores/(.*)`.
@@ -72,8 +73,8 @@ An other great feature is the possibility to use named group instead of indexed 
 }
 ----
 
+
 == Http Status Code
-`
 |===
 |Code |Message
 
