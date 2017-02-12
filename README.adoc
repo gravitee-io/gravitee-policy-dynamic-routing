@@ -58,7 +58,7 @@ For example: the rule's path is `/v1/stores/(.*)` to capture the end of the path
 in the _redirect to_ property: `\http://store_backend/stores/{#group[0]}`
 
 An other great feature is the possibility to use named group instead of indexed group.
-`/api/(?<store>v[0-9]+)/stores.*` => `\http://host1/products/api/{#groupName['version']}`
+`/api/(?<version>v[0-9]+)/stores.*` => `\http://host1/products/api/{#groupName['version']}`
 
 [source, json]
 .Configuration example
