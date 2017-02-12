@@ -46,6 +46,8 @@ When using the Dynamic Routing policy, you can define multiple rules and their r
 initial request path.
 
 WARNING: When defining rule, please consider that the API's context-path must not be part of the rule's path!
+If your context-path is `/myapi` and your call is `/myapi/123`, if you want to select `123` the regular expression will be `/(.*)`.
+Don't forget the `/`.
 
 
 === Regular expressions
