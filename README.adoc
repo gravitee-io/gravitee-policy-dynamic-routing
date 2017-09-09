@@ -75,6 +75,20 @@ An other great feature is the possibility to use named group instead of indexed 
 }
 ----
 
+It's also possible to select a configured endpoint on your API, by its name using expression language.
+
+[source, json]
+.Configuration example with endpoint selection
+----
+"dynamic-routing": {
+    "rules": [
+        {
+            "pattern": "/v1/stores/(.*)",
+            "url": "{#endpoints['default']}/{#group[0]}"
+        }
+    ]
+}
+----
 
 == Http Status Code
 |===
