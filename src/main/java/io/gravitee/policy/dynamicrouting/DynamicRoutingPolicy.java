@@ -27,6 +27,9 @@ import io.gravitee.policy.dynamicrouting.configuration.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -67,60 +70,65 @@ public class DynamicRoutingPolicy {
 
     @OnRequest
     public void onRequest(Request request, Response response, ExecutionContext executionContext, PolicyChain policyChain) {
-        String path = request.path();
-        String contextPath = (String) executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH);
-        String subPath = path.substring(contextPath.length());
+        try {
+            String path = URLDecoder.decode(request.path(), Charset.defaultCharset().name());
+            String contextPath = (String) executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH);
+            String subPath = path.substring(contextPath.length());
 
-        LOGGER.debug("Dynamic routing for path {}", subPath);
+            LOGGER.debug("Dynamic routing for path {}", subPath);
 
-        if (configuration.getRules() != null && !configuration.getRules().isEmpty()) {
-            // Look for a matching pattern from rules
-            Optional<Rule> optRule = configuration.getRules().stream().filter(
-                    rule -> rule.getPattern().matcher(subPath).matches()).findFirst();
+            if (configuration.getRules() != null && !configuration.getRules().isEmpty()) {
+                // Look for a matching pattern from rules
+                Optional<Rule> optRule = configuration.getRules().stream().filter(
+                        rule -> rule.getPattern().matcher(subPath).matches()).findFirst();
 
-            if (optRule.isPresent()) {
-                Rule rule = optRule.get();
+                if (optRule.isPresent()) {
+                    Rule rule = optRule.get();
 
-                LOGGER.debug("Applying rule for path {}: [{} - {}]", subPath, rule.getPattern(), rule.getUrl());
-                String endpoint = rule.getUrl();
+                    LOGGER.debug("Applying rule for path {}: [{} - {}]", subPath, rule.getPattern(), rule.getUrl());
+                    String endpoint = rule.getUrl();
 
-                // Apply regex capture / replacement
-                Matcher match = rule.getPattern().matcher(subPath);
+                    // Apply regex capture / replacement
+                    Matcher match = rule.getPattern().matcher(subPath);
 
-                // Required to calculate capture groups
-                match.matches();
+                    // Required to calculate capture groups
+                    match.matches();
 
-                // Extract capture group by index
-                String [] groups = new String[match.groupCount()];
-                for (int idx = 0; idx < match.groupCount(); idx++) {
-                    groups[idx] = match.group(idx + 1);
+                    // Extract capture group by index
+                    String [] groups = new String[match.groupCount()];
+                    for (int idx = 0; idx < match.groupCount(); idx++) {
+                        groups[idx] = match.group(idx + 1);
+                    }
+                    executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_ATTRIBUTE, groups);
+
+                    // Extract capture group by name
+                    Set<String> extractedGroupNames = getNamedGroupCandidates(rule.getPattern().pattern());
+                    Map<String, String> groupNames = extractedGroupNames.stream().collect(
+                            Collectors.toMap(groupName -> groupName, match::group));
+                    executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_NAME_ATTRIBUTE, groupNames);
+
+                    // Given endpoint can be defined as the template using EL
+                    LOGGER.debug("Transform endpoint {} using template engine", endpoint);
+                    endpoint = executionContext.getTemplateEngine().convert(endpoint);
+
+                    // Set final endpoint
+                    executionContext.setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, endpoint);
+                    LOGGER.debug("Route request to {}", endpoint);
+
+                    // And continue request processing....
+                    policyChain.doNext(request, response);
+                } else {
+                    LOGGER.warn("No defined rule is matching path {}", subPath);
+                    // No rule is matching request path
+                    policyChain.failWith(PolicyResult.failure(HttpStatusCode.BAD_REQUEST_400, "No routing rule is matching path"));
                 }
-                executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_ATTRIBUTE, groups);
-
-                // Extract capture group by name
-                Set<String> extractedGroupNames = getNamedGroupCandidates(rule.getPattern().pattern());
-                Map<String, String> groupNames = extractedGroupNames.stream().collect(
-                        Collectors.toMap(groupName -> groupName, match::group));
-                executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_NAME_ATTRIBUTE, groupNames);
-
-                // Given endpoint can be defined as the template using EL
-                LOGGER.debug("Transform endpoint {} using template engine", endpoint);
-                endpoint = executionContext.getTemplateEngine().convert(endpoint);
-
-                // Set final endpoint
-                executionContext.setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, endpoint);
-                LOGGER.debug("Route request to {}", endpoint);
-
-                // And continue request processing....
-                policyChain.doNext(request, response);
             } else {
-                LOGGER.warn("No defined rule is matching path {}", subPath);
-                // No rule is matching request path
-                policyChain.failWith(PolicyResult.failure(HttpStatusCode.BAD_REQUEST_400, "No routing rule is matching path"));
+                // No rule defined
+                policyChain.doNext(request, response);
             }
-        } else {
-            // No rule defined
-            policyChain.doNext(request, response);
+        } catch (UnsupportedEncodingException uee) {
+            // Invalid path
+            policyChain.failWith(PolicyResult.failure(HttpStatusCode.INTERNAL_SERVER_ERROR_500, "Invalid path"));
         }
     }
 

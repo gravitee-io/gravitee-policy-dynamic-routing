@@ -139,6 +139,56 @@ public class DynamicRoutingPolicyTest {
     }
 
     @Test
+    public void test_shouldDynamicRouting_singleMatchingRule_notEncodedUrl() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule(Pattern.compile("/[0-9,;]+"), "http://host1/product"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        final HttpHeaders headers = new HttpHeaders();
+        when(request.headers()).thenReturn(headers);
+        when(request.path()).thenReturn("/products/2124;2125");
+
+        // Prepare context
+        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
+
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).doNext(request, response);
+        verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, rules.iterator().next().getUrl());
+    }
+
+    @Test
+    public void test_shouldDynamicRouting_singleMatchingRule_encodedUrl() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule(Pattern.compile("/[0-9,;]+"), "http://host1/product"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        final HttpHeaders headers = new HttpHeaders();
+        when(request.headers()).thenReturn(headers);
+        when(request.path()).thenReturn("/products/2124%3B2125");
+
+        // Prepare context
+        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
+
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).doNext(request, response);
+        verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, rules.iterator().next().getUrl());
+    }
+
+    @Test
     public void test_shouldDynamicRouting_multipleMatchingRule() {
         // Prepare policy configuration
         List<Rule> rules = new ArrayList<>();
