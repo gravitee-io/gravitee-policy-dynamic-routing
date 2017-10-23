@@ -24,7 +24,7 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.dynamicrouting.configuration.DynamicRoutingPolicyConfiguration;
 import io.gravitee.policy.dynamicrouting.configuration.Rule;
-import io.gravitee.reporter.api.http.RequestMetrics;
+import io.gravitee.reporter.api.http.Metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,7 +69,7 @@ public class DynamicRoutingPolicyTest {
         initMocks(this);
 
         dynamicRoutingPolicy = new DynamicRoutingPolicy(dynamicRoutingPolicyConfiguration);
-        when(request.metrics()).thenReturn(RequestMetrics.on(System.currentTimeMillis()).build());
+        when(request.metrics()).thenReturn(Metrics.on(System.currentTimeMillis()).build());
     }
 
     @Test
