@@ -113,21 +113,12 @@ public class DynamicRoutingPolicy {
                     LOGGER.debug("Transform endpoint {} using template engine", endpoint);
                     endpoint = executionContext.getTemplateEngine().convert(endpoint);
 
-                    // If we are in the case of an absolute path, there is an endpoint reference in destination URL
-                    // Absolute path, so the endpoint must start by http or https
-                    // If not, there was probably an issue to resolve the endpoint reference
-                    if (rule.getUrl().contains(ENDPOINT_VARIABLE_PREFIX_NAME) &&
-                            (endpoint == null || !endpoint.matches("^(?i)(https?)://.*$"))) {
-                        policyChain.failWith(
-                                PolicyResult.failure(HttpStatusCode.BAD_GATEWAY_502, "Bad gateway"));
-                    } else {
-                        // Set final endpoint
-                        executionContext.setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, endpoint);
-                        LOGGER.debug("Route request to {}", endpoint);
+                    // Set final endpoint
+                    executionContext.setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, endpoint);
+                    LOGGER.debug("Route request to {}", endpoint);
 
-                        // And continue request processing....
-                        policyChain.doNext(request, response);
-                    }
+                    // And continue request processing....
+                    policyChain.doNext(request, response);
                 } else {
                     LOGGER.warn("No defined rule is matching path {}", subPath);
                     // No rule is matching request path
