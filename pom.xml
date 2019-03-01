@@ -34,10 +34,9 @@
     </parent>
 
     <properties>
-        <gravitee-gateway-api.version>1.10.0</gravitee-gateway-api.version>
+        <gravitee-gateway-api.version>1.14.0-SNAPSHOT</gravitee-gateway-api.version>
         <gravitee-policy-api.version>1.2.0</gravitee-policy-api.version>
         <gravitee-common.version>1.11.0</gravitee-common.version>
-        <gravitee-gateway.version>1.17.0</gravitee-gateway.version>
 
         <maven-assembly-plugin.version>2.5.5</maven-assembly-plugin.version>
         <jackson.version>2.5.3</jackson.version>
@@ -98,13 +97,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.gravitee.gateway</groupId>
-            <artifactId>gravitee-gateway-el</artifactId>
-            <version>${gravitee-gateway.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

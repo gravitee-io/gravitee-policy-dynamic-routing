@@ -16,10 +16,10 @@
 package io.gravitee.policy.dynamicrouting;
 
 import io.gravitee.common.http.HttpHeaders;
+import io.gravitee.el.TemplateEngine;
 import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Request;
 import io.gravitee.gateway.api.Response;
-import io.gravitee.gateway.el.SpelTemplateEngine;
 import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.dynamicrouting.configuration.DynamicRoutingPolicyConfiguration;
@@ -103,7 +103,7 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
@@ -127,7 +127,7 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
@@ -152,7 +152,7 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/2124;2125");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
@@ -177,7 +177,7 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/2124%3B2125");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
@@ -203,7 +203,7 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
@@ -229,7 +229,7 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
@@ -255,7 +255,7 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/v1/ecom/search");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
@@ -280,7 +280,7 @@ public class DynamicRoutingPolicyTest {
         when(request.path()).thenReturn("/products/api/v12/ecome");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(new SpelTemplateEngine());
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
