@@ -15,7 +15,6 @@
  */
 package io.gravitee.policy.dynamicrouting;
 
-import io.gravitee.common.http.HttpHeaders;
 import io.gravitee.el.TemplateEngine;
 import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Request;
@@ -24,12 +23,11 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.dynamicrouting.configuration.DynamicRoutingPolicyConfiguration;
 import io.gravitee.policy.dynamicrouting.configuration.Rule;
-import io.gravitee.reporter.api.http.Metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +36,6 @@ import java.util.regex.Pattern;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
@@ -66,17 +63,12 @@ public class DynamicRoutingPolicyTest {
 
     @Before
     public void init() {
-        initMocks(this);
-
         dynamicRoutingPolicy = new DynamicRoutingPolicy(dynamicRoutingPolicyConfiguration);
-        when(request.metrics()).thenReturn(Metrics.on(System.currentTimeMillis()).build());
     }
 
     @Test
     public void test_shouldThrowFailure_noRule() {
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/ecom/");
 
         // Prepare context
@@ -98,12 +90,9 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
-        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
         when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
@@ -122,8 +111,6 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
@@ -147,8 +134,6 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/2124;2125");
 
         // Prepare context
@@ -172,8 +157,6 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/2124%3B2125");
 
         // Prepare context
@@ -198,8 +181,6 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
@@ -224,8 +205,6 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
@@ -250,8 +229,6 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/v1/ecom/search");
 
         // Prepare context
@@ -275,8 +252,6 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        final HttpHeaders headers = new HttpHeaders();
-        when(request.headers()).thenReturn(headers);
         when(request.path()).thenReturn("/products/api/v12/ecome");
 
         // Prepare context
