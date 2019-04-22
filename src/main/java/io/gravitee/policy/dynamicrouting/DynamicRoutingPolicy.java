@@ -54,8 +54,6 @@ public class DynamicRoutingPolicy {
     private final static String GROUP_ATTRIBUTE = "group";
     private final static String GROUP_NAME_ATTRIBUTE = "groupName";
 
-    private final static String ENDPOINT_VARIABLE_PREFIX_NAME = "#endpoints";
-
     /**
      * The associated configuration to this Policy
      */
