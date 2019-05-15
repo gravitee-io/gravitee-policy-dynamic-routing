@@ -117,6 +117,10 @@ public class DynamicRoutingPolicy {
                     executionContext.setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, endpoint);
                     LOGGER.debug("Route request to {}", endpoint);
 
+                    // Add useRawPath parameter in ExecutionContext
+                    executionContext.setAttribute(ExecutionContext.ATTR_ENDPOINT_RESOLVER_USE_RAW_PATH, rule.getUseRawPath());
+                    LOGGER.debug("useRawPath set to {}", rule.getUseRawPath());
+                    
                     // And continue request processing....
                     policyChain.doNext(request, response);
                 } else {
