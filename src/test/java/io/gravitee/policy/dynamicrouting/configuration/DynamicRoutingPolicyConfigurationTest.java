@@ -15,7 +15,6 @@
  */
 package io.gravitee.policy.dynamicrouting.configuration;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,11 +34,6 @@ public class DynamicRoutingPolicyConfigurationTest {
                 load("/io/gravitee/policy/dynamicrouting/configuration/configuration1.json");
 
         Assert.assertEquals(1, configuration.getRules().size());
-    }
-
-    @Test(expected = JsonMappingException.class)
-    public void testConfiguration_invalidPattern() throws IOException {
-        load("/io/gravitee/policy/dynamicrouting/configuration/configuration2.json");
     }
 
     private DynamicRoutingPolicyConfiguration load(String resource) throws IOException {
