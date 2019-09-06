@@ -31,11 +31,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 /**
@@ -77,20 +77,25 @@ public class DynamicRoutingPolicy {
             String subPath = path.substring(contextPath.length());
 
             LOGGER.debug("Dynamic routing for path {}", subPath);
-
+            Rule rule = null;
+            Pattern pattern = null;
             if (configuration.getRules() != null && !configuration.getRules().isEmpty()) {
                 // Look for a matching pattern from rules
-                Optional<Rule> optRule = configuration.getRules().stream().filter(
-                        rule -> rule.getPattern().matcher(subPath).matches()).findFirst();
+                for (final Rule r : configuration.getRules()) {
+                    final String p = executionContext.getTemplateEngine().getValue(r.getPattern(), String.class);
+                    pattern = Pattern.compile(p);
+                    if (pattern.matcher(subPath).matches()) {
+                        rule = r;
+                        break;
+                    }
+                }
 
-                if (optRule.isPresent()) {
-                    Rule rule = optRule.get();
-
+                if (rule != null && pattern != null) {
                     LOGGER.debug("Applying rule for path {}: [{} - {}]", subPath, rule.getPattern(), rule.getUrl());
                     String endpoint = rule.getUrl();
 
                     // Apply regex capture / replacement
-                    Matcher match = rule.getPattern().matcher(subPath);
+                    Matcher match = pattern.matcher(subPath);
 
                     // Required to calculate capture groups
                     match.matches();
@@ -103,14 +108,14 @@ public class DynamicRoutingPolicy {
                     executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_ATTRIBUTE, groups);
 
                     // Extract capture group by name
-                    Set<String> extractedGroupNames = getNamedGroupCandidates(rule.getPattern().pattern());
+                    Set<String> extractedGroupNames = getNamedGroupCandidates(pattern.pattern());
                     Map<String, String> groupNames = extractedGroupNames.stream().collect(
                             Collectors.toMap(groupName -> groupName, match::group));
                     executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_NAME_ATTRIBUTE, groupNames);
 
                     // Given endpoint can be defined as the template using EL
                     LOGGER.debug("Transform endpoint {} using template engine", endpoint);
-                    endpoint = executionContext.getTemplateEngine().convert(endpoint);
+                    endpoint = executionContext.getTemplateEngine().getValue(endpoint, String.class);
 
                     // Set final endpoint
                     executionContext.setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, endpoint);
@@ -130,6 +135,9 @@ public class DynamicRoutingPolicy {
         } catch (UnsupportedEncodingException uee) {
             // Invalid path
             policyChain.failWith(PolicyResult.failure(HttpStatusCode.INTERNAL_SERVER_ERROR_500, "Invalid path"));
+        } catch (PatternSyntaxException pse) {
+            // Invalid pattern syntax
+            policyChain.failWith(PolicyResult.failure(HttpStatusCode.INTERNAL_SERVER_ERROR_500, "Invalid pattern syntax"));
         }
     }
 

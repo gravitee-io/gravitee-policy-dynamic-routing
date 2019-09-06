@@ -15,35 +15,29 @@
  */
 package io.gravitee.policy.dynamicrouting.configuration;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.gravitee.policy.dynamicrouting.configuration.jackson.PatternDeserializer;
-
-import java.util.regex.Pattern;
-
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
 public final class Rule {
 
-    @JsonDeserialize(using = PatternDeserializer.class)
-    private Pattern pattern;
+    private String pattern;
 
     private String url;
     
     public Rule() {
     }
 
-    public Rule(Pattern pattern, String url) {
+    public Rule(String pattern, String url) {
         this.pattern = pattern;
         this.url = url;
     }
 
-    public Pattern getPattern() {
+    public String getPattern() {
         return pattern;
     }
 
-    public void setPattern(Pattern pattern) {
+    public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 

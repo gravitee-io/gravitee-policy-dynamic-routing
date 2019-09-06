@@ -1,8 +1,0 @@
-{
-  "rules": [
-    {
-      "pattern": "/ecom/($12[a-/search.*)",
-      "url": "http://localhost/product"
-    }
-  ]
-}
