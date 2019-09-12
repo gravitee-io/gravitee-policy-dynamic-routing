@@ -31,19 +31,12 @@ public final class Rule {
 
     private String url;
     
-    private Boolean useRawPath;
-
     public Rule() {
     }
 
     public Rule(Pattern pattern, String url) {
-        this(pattern, url, Boolean.FALSE);
-    }
-    
-    public Rule(Pattern pattern, String url, Boolean useRawPath) {
         this.pattern = pattern;
         this.url = url;
-        this.useRawPath = useRawPath;
     }
 
     public Pattern getPattern() {
@@ -61,14 +54,4 @@ public final class Rule {
     public void setUrl(String url) {
         this.url = url;
     }
-
-	public Boolean getUseRawPath() {
-		return useRawPath;
-	}
-
-	public void setUseRawPath(Boolean useRawPath) {
-		this.useRawPath = useRawPath;
-	}
-    
-    
 }
