@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
+ * @author Nicolas GERAUD (nicolas.geraud at graviteesource.com)
  * @author GraviteeSource Team
  */
 public class DynamicRoutingPolicy {
@@ -53,8 +54,6 @@ public class DynamicRoutingPolicy {
 
     private final static String GROUP_ATTRIBUTE = "group";
     private final static String GROUP_NAME_ATTRIBUTE = "groupName";
-
-    private final static String ENDPOINT_VARIABLE_PREFIX_NAME = "#endpoints";
 
     /**
      * The associated configuration to this Policy
@@ -117,10 +116,6 @@ public class DynamicRoutingPolicy {
                     executionContext.setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, endpoint);
                     LOGGER.debug("Route request to {}", endpoint);
 
-                    // Add useRawPath parameter in ExecutionContext
-                    executionContext.setAttribute(ExecutionContext.ATTR_ENDPOINT_RESOLVER_USE_RAW_PATH, rule.getUseRawPath());
-                    LOGGER.debug("useRawPath set to {}", rule.getUseRawPath());
-                    
                     // And continue request processing....
                     policyChain.doNext(request, response);
                 } else {

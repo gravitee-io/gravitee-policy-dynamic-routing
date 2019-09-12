@@ -22,11 +22,6 @@
             "title": "Redirect to",
             "description": "The target endpoint (support EL).",
             "type" : "string"
-          },
-          "useRawPath" : {
-            "title": "Use raw path",
-            "description": "If checked, encoded characters in the target endpoint won't be decoded",
-            "type": "boolean"
           }
         },
         "required": [
