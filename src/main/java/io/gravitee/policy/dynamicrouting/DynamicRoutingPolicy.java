@@ -72,9 +72,7 @@ public class DynamicRoutingPolicy {
     @OnRequest
     public void onRequest(Request request, Response response, ExecutionContext executionContext, PolicyChain policyChain) {
         try {
-            String path = URLDecoder.decode(request.path(), Charset.defaultCharset().name());
-            String contextPath = (String) executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH);
-            String subPath = path.substring(contextPath.length());
+            String subPath = URLDecoder.decode(request.pathInfo(), Charset.defaultCharset().name());
 
             LOGGER.debug("Dynamic routing for path {}", subPath);
             Rule rule = null;
