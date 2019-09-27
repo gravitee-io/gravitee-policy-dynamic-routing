@@ -70,10 +70,7 @@ public class DynamicRoutingPolicyTest {
     @Test
     public void test_shouldThrowFailure_noRule() {
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/ecom/");
-
-        // Prepare context
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
+        when(request.pathInfo()).thenReturn("/products/ecom/");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -91,11 +88,10 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/v1/ecom/");
+        when(request.pathInfo()).thenReturn("/products/v1/ecom/");
 
         // Prepare context
         when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -113,11 +109,10 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/v1/ecom/");
+        when(request.pathInfo()).thenReturn("/v1/ecom/");
 
         // Prepare context
         when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -136,11 +131,10 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/2124;2125");
+        when(request.pathInfo()).thenReturn("/2124;2125");
 
         // Prepare context
         when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -159,11 +153,10 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/2124%3B2125");
+        when(request.pathInfo()).thenReturn("/2124%3B2125");
 
         // Prepare context
         when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -183,11 +176,10 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/v1/ecom/");
+        when(request.pathInfo()).thenReturn("/v1/ecom/");
 
         // Prepare context
         when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -207,11 +199,10 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/v1/ecom/");
+        when(request.pathInfo()).thenReturn("/v1/ecom/");
 
         // Prepare context
         when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -231,11 +222,10 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/v1/ecom/search");
+        when(request.pathInfo()).thenReturn("/v1/ecom/search");
 
         // Prepare context
         when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -254,11 +244,10 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/products/api/v12/ecome");
+        when(request.pathInfo()).thenReturn("/api/v12/ecome");
 
         // Prepare context
         when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/products");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -277,15 +266,14 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/api/products/2124%3B2125");
+        when(request.pathInfo()).thenReturn("/api/products/2124%3B2125");
 
         // Prepare context
         final TemplateEngine templateEngine = mock(TemplateEngine.class);
         when(executionContext.getTemplateEngine()).thenReturn(templateEngine);
-        when(templateEngine.getValue("/{#request.paths[1]}/(.*)", String.class)).thenReturn("/products/(.*)");
+        when(templateEngine.getValue("/{#request.paths[1]}/(.*)", String.class)).thenReturn("/(.*)");
         final TemplateContext templateContext = mock(TemplateContext.class);
         when(templateEngine.getTemplateContext()).thenReturn(templateContext);
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/api");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
@@ -303,13 +291,12 @@ public class DynamicRoutingPolicyTest {
         when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
 
         // Prepare inbound request
-        when(request.path()).thenReturn("/api/ecom/2124%3B2125");
+        when(request.pathInfo()).thenReturn("/ecom/2124%3B2125");
 
         // Prepare context
         final TemplateEngine templateEngine = mock(TemplateEngine.class);
         when(executionContext.getTemplateEngine()).thenReturn(templateEngine);
         when(templateEngine.getValue("/ecom/($12[a-/search.*)", String.class)).thenReturn("/ecom/($12[a-/search.*)");
-        when(executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH)).thenReturn("/api");
 
         // Execute policy
         dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);

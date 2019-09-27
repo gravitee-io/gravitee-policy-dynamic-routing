@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
+ * @author Nicolas GERAUD (nicolas.geraud at graviteesource.com)
  * @author GraviteeSource Team
  */
 public class DynamicRoutingPolicy {
@@ -71,9 +72,7 @@ public class DynamicRoutingPolicy {
     @OnRequest
     public void onRequest(Request request, Response response, ExecutionContext executionContext, PolicyChain policyChain) {
         try {
-            String path = URLDecoder.decode(request.path(), Charset.defaultCharset().name());
-            String contextPath = (String) executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH);
-            String subPath = path.substring(contextPath.length());
+            String subPath = URLDecoder.decode(request.pathInfo(), Charset.defaultCharset().name());
 
             LOGGER.debug("Dynamic routing for path {}", subPath);
             Rule rule = null;
@@ -120,10 +119,6 @@ public class DynamicRoutingPolicy {
                     executionContext.setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, endpoint);
                     LOGGER.debug("Route request to {}", endpoint);
 
-                    // Add useRawPath parameter in ExecutionContext
-                    executionContext.setAttribute(ExecutionContext.ATTR_ENDPOINT_RESOLVER_USE_RAW_PATH, rule.getUseRawPath());
-                    LOGGER.debug("useRawPath set to {}", rule.getUseRawPath());
-                    
                     // And continue request processing....
                     policyChain.doNext(request, response);
                 } else {
