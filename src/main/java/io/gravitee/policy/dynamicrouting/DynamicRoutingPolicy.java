@@ -74,9 +74,10 @@ public class DynamicRoutingPolicy {
         try {
             String path = URLDecoder.decode(request.path(), Charset.defaultCharset().name());
             String contextPath = (String) executionContext.getAttribute(ExecutionContext.ATTR_CONTEXT_PATH);
-            String subPath = path.substring(contextPath.length());
+            String decodedSubPath = path.substring(contextPath.length());
+            String originalSubPath = request.path().substring(contextPath.length());
 
-            LOGGER.debug("Dynamic routing for path {}", subPath);
+            LOGGER.debug("Dynamic routing for path {}", originalSubPath);
             Rule rule = null;
             Pattern pattern = null;
             if (configuration.getRules() != null && !configuration.getRules().isEmpty()) {
@@ -84,18 +85,18 @@ public class DynamicRoutingPolicy {
                 for (final Rule r : configuration.getRules()) {
                     final String p = executionContext.getTemplateEngine().getValue(r.getPattern(), String.class);
                     pattern = Pattern.compile(p);
-                    if (pattern.matcher(subPath).matches()) {
+                    if (pattern.matcher(decodedSubPath).matches()) {
                         rule = r;
                         break;
                     }
                 }
 
                 if (rule != null && pattern != null) {
-                    LOGGER.debug("Applying rule for path {}: [{} - {}]", subPath, rule.getPattern(), rule.getUrl());
+                    LOGGER.debug("Applying rule for path {}: [{} - {}]", originalSubPath, rule.getPattern(), rule.getUrl());
                     String endpoint = rule.getUrl();
 
                     // Apply regex capture / replacement
-                    Matcher match = pattern.matcher(subPath);
+                    Matcher match = pattern.matcher(originalSubPath);
 
                     // Required to calculate capture groups
                     match.matches();
@@ -124,7 +125,7 @@ public class DynamicRoutingPolicy {
                     // And continue request processing....
                     policyChain.doNext(request, response);
                 } else {
-                    LOGGER.warn("No defined rule is matching path {}", subPath);
+                    LOGGER.warn("No defined rule is matching path {}", originalSubPath);
                     // No rule is matching request path
                     policyChain.failWith(PolicyResult.failure(HttpStatusCode.BAD_REQUEST_400, "No routing rule is matching path"));
                 }
