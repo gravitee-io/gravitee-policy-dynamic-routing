@@ -40,6 +40,7 @@ import static org.mockito.Mockito.*;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
+ * @author Nicolas GERAUD (nicolas.geraud at graviteesource.com)
  * @author GraviteeSource Team
  */
 @RunWith(MockitoJUnitRunner.class)
@@ -303,5 +304,92 @@ public class DynamicRoutingPolicyTest {
 
         // Check results
         verify(policyChain).failWith(any(PolicyResult.class));
+    }
+
+    @Test
+    public void test_shouldDynamicRouting_singleMatchingRule_encodeddUrlAndNotEncodedPath() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule("/foo bar", "http://host1/product"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        when(request.pathInfo()).thenReturn("/foo%20bar");
+
+        // Prepare context
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
+
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).doNext(request, response);
+        verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, rules.iterator().next().getUrl());
+    }
+
+    @Test
+    public void test_shouldNotDynamicRouting_singleMatchingRule_encodedUrlAndEncodedPath() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule("/foo%20bar", "http://host1/product"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        when(request.pathInfo()).thenReturn("/products/foo%20bar");
+
+        // Prepare context
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
+
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).failWith(any(PolicyResult.class));
+    }
+
+    @Test
+    public void test_shouldDynamicRouting_singleMatchingRule_WithGroup() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule("/foo/(.*)", "http://host1/{#group[0]}"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        when(request.pathInfo()).thenReturn("/foo/bar");
+
+        // Prepare context
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
+
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).doNext(request, response);
+        verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, "http://host1/bar");
+    }
+
+    @Test
+    public void test_shouldDynamicRouting_singleMatchingRule_WithEncodedGroup() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule("/foo/(.*)", "http://host1/{#group[0]}"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        when(request.pathInfo()).thenReturn("/foo/%3Dbar");
+
+        // Prepare context
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
+
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).doNext(request, response);
+        verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, "http://host1/%3Dbar");
     }
 }
