@@ -15,13 +15,19 @@
         "properties" : {
           "pattern" : {
             "title": "Match expression",
-            "description": "The key used to store the element (support EL).",
-            "type" : "string"
+            "description": "The key used to store the element (Support EL).",
+            "type" : "string",
+            "x-schema-form": {
+              "expression-language": true
+            }
           },
           "url" : {
             "title": "Redirect to",
-            "description": "The target endpoint (support EL).",
-            "type" : "string"
+            "description": "The target endpoint (Support EL).",
+            "type" : "string",
+            "x-schema-form": {
+              "expression-language": true
+            }
           }
         },
         "required": [
