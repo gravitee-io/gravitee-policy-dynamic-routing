@@ -48,16 +48,17 @@ initial request path.
 WARNING: When you define rules, it is important to remember that the API `context-path` must not be part of the rule's path.
 For example, if your `context-path` is `/myapi` and your call is `/myapi/123`, if you want to select `123` the regular expression is `/(.*)` (don't forget the `/`).
 
+[[regular-expressions]]
 === Regular expressions
 
-Using regular expressions can be very useful when you want to capture some parts of the initial request path and reuse
-them to define the redirection.
+Using regular expressions can be very useful when you want to capture some parts of the initial request path and reuse them to define the redirection.
 
-For example, to capture the end of a path after `/v1/stores/`, the rule path is `/v1/stores/(.*)`. You can then use it
-in the `redirect to` property: `\http://store_backend/stores/{#group[[0]]}`
+For example, to capture the end of a path after `/v1/stores/`, the rule path is `/v1/stores/(.*)`. You can then use it in the `redirect to` property: `\http://store_backend/stores/{#group[[0]]}`
 
-You can also use named groups instead of indexed groups:
+You can also use named groups or endpoints, which you define using the APIM *Proxy > Endpoints* function, instead of indexed groups:
 `/api/(?<version>v[0-9]+)/stores.*` => `\http://host1/products/api/{#groupName['version']}`
+
+If you redirect to a named group, APIM uses the load balancing algorithm defined for the group to determine how the endpoints are selected. For more information, see link:/apim/3.x/apim_publisherguide_backend_services.html#endpoint-groups[Endpoint groups^].
 
 == Examples
 
