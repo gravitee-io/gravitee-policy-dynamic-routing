@@ -75,7 +75,6 @@ public class DynamicRoutingPolicy {
             String decodedSubPath = URLDecoder.decode(request.pathInfo(), Charset.defaultCharset().name());
             String originalSubPath = request.pathInfo();
 
-
             LOGGER.debug("Dynamic routing for path {}", originalSubPath);
             Rule rule = null;
             Pattern pattern = null;
@@ -124,7 +123,6 @@ public class DynamicRoutingPolicy {
                     // And continue request processing....
                     policyChain.doNext(request, response);
                 } else {
-                    LOGGER.warn("No defined rule is matching path {}", originalSubPath);
                     // No rule is matching request path
                     policyChain.failWith(PolicyResult.failure(HttpStatusCode.BAD_REQUEST_400, "No routing rule is matching path"));
                 }
