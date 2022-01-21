@@ -24,9 +24,6 @@ import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.api.annotations.OnRequest;
 import io.gravitee.policy.dynamicrouting.configuration.DynamicRoutingPolicyConfiguration;
 import io.gravitee.policy.dynamicrouting.configuration.Rule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -37,6 +34,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
@@ -50,10 +49,10 @@ public class DynamicRoutingPolicy {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicRoutingPolicy.class);
 
-    private final static Pattern GROUP_NAME_PATTERN = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>");
+    private static final Pattern GROUP_NAME_PATTERN = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>");
 
-    private final static String GROUP_ATTRIBUTE = "group";
-    private final static String GROUP_NAME_ATTRIBUTE = "groupName";
+    private static final String GROUP_ATTRIBUTE = "group";
+    private static final String GROUP_NAME_ATTRIBUTE = "groupName";
 
     /**
      * The associated configuration to this Policy
@@ -74,7 +73,6 @@ public class DynamicRoutingPolicy {
         try {
             String decodedSubPath = URLDecoder.decode(request.pathInfo(), Charset.defaultCharset().name());
             String originalSubPath = request.pathInfo();
-
 
             LOGGER.debug("Dynamic routing for path {}", originalSubPath);
             Rule rule = null;
@@ -109,8 +107,9 @@ public class DynamicRoutingPolicy {
 
                     // Extract capture group by name
                     Set<String> extractedGroupNames = getNamedGroupCandidates(pattern.pattern());
-                    Map<String, String> groupNames = extractedGroupNames.stream().collect(
-                            Collectors.toMap(groupName -> groupName, match::group));
+                    Map<String, String> groupNames = extractedGroupNames
+                        .stream()
+                        .collect(Collectors.toMap(groupName -> groupName, match::group));
                     executionContext.getTemplateEngine().getTemplateContext().setVariable(GROUP_NAME_ATTRIBUTE, groupNames);
 
                     // Given endpoint can be defined as the template using EL

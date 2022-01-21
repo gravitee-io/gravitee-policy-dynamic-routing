@@ -24,9 +24,8 @@ public final class Rule {
     private String pattern;
 
     private String url;
-    
-    public Rule() {
-    }
+
+    public Rule() {}
 
     public Rule(String pattern, String url) {
         this.pattern = pattern;
