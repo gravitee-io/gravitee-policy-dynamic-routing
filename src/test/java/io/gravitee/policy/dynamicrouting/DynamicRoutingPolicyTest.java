@@ -15,6 +15,9 @@
  */
 package io.gravitee.policy.dynamicrouting;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+
 import io.gravitee.el.TemplateContext;
 import io.gravitee.el.TemplateEngine;
 import io.gravitee.gateway.api.ExecutionContext;
@@ -24,19 +27,15 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.dynamicrouting.configuration.DynamicRoutingPolicyConfiguration;
 import io.gravitee.policy.dynamicrouting.configuration.Rule;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.PatternSyntaxException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.PatternSyntaxException;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
