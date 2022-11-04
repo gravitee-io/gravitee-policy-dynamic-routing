@@ -15,7 +15,7 @@
         "properties" : {
           "pattern" : {
             "title": "Match expression",
-            "description": "The key used to store the element (Support EL).",
+            "description": "Regular expression to match incoming path (Support EL).",
             "type" : "string",
             "x-schema-form": {
               "expression-language": true
