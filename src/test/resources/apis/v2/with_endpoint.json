@@ -1,0 +1,56 @@
+{
+    "id": "with_endpoint",
+    "name": "with_endpoint",
+    "gravitee": "2.0.0",
+    "proxy": {
+        "context_path": "/with_endpoint",
+        "groups" :[
+            {
+                "name": "default-group",
+                "endpoints": [
+                    {
+                        "name": "default",
+                        "target": "http://localhost:8080/endpoint"
+                    }
+                ]
+            },
+            {
+                "name": "group1",
+                "endpoints": [
+                    {
+                        "name": "endpoint1",
+                        "target": "http://endpoint1:8080"
+                    }
+                ]
+            }
+        ]
+    },
+    "flows": [
+        {
+            "name": "flow-1",
+            "methods": ["GET"],
+            "enabled": true,
+            "path-operator": {
+                "path": "/",
+                "operator": "STARTS_WITH"
+            },
+            "pre": [
+                {
+                    "name": "Dynamic routing",
+                    "description": "",
+                    "enabled": true,
+                    "policy": "dynamic-routing",
+                    "configuration": {
+                        "rules": [
+                            {
+                                "pattern": "/v1/stores/(.*)",
+                                "url": "{#endpoints['group1']}/{#group[0]}"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "post": []
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "id": "with_absolute_url",
+    "name": "with_absolute_url",
+    "gravitee": "2.0.0",
+    "proxy": {
+        "context_path": "/with_absolute_url",
+        "groups" :[
+            {
+                "name": "default-group",
+                "endpoints": [
+                    {
+                        "name": "default",
+                        "target": "http://localhost:8080/"
+                    }
+                ]
+            }
+        ]
+    },
+    "flows": [
+        {
+            "name": "flow-1",
+            "methods": ["GET"],
+            "enabled": true,
+            "path-operator": {
+                "path": "/",
+                "operator": "STARTS_WITH"
+            },
+            "pre": [
+                {
+                    "name": "Dynamic routing",
+                    "description": "",
+                    "enabled": true,
+                    "policy": "dynamic-routing",
+                    "configuration": {
+                        "rules": [
+                            {
+                                "pattern": "/(.*)",
+                                "url": "https://example.com"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "post": []
+        }
+    ]
+}
