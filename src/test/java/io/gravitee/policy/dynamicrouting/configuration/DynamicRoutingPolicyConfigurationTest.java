@@ -18,8 +18,8 @@ package io.gravitee.policy.dynamicrouting.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URL;
-import org.junit.Assert;
-import org.junit.Test;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
@@ -31,7 +31,7 @@ public class DynamicRoutingPolicyConfigurationTest {
     public void testConfiguration_singleRule() throws IOException {
         DynamicRoutingPolicyConfiguration configuration = load("/io/gravitee/policy/dynamicrouting/configuration/configuration1.json");
 
-        Assert.assertEquals(1, configuration.getRules().size());
+        Assertions.assertThat(configuration.getRules()).hasSize(1);
     }
 
     private DynamicRoutingPolicyConfiguration load(String resource) throws IOException {
