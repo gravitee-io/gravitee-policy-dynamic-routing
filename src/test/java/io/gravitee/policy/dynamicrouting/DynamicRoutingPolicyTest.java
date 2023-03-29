@@ -15,8 +15,10 @@
  */
 package io.gravitee.policy.dynamicrouting;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import io.gravitee.el.TemplateContext;
 import io.gravitee.el.TemplateEngine;
@@ -27,22 +29,20 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.dynamicrouting.configuration.DynamicRoutingPolicyConfiguration;
 import io.gravitee.policy.dynamicrouting.configuration.Rule;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.PatternSyntaxException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author Nicolas GERAUD (nicolas.geraud at graviteesource.com)
  * @author GraviteeSource Team
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DynamicRoutingPolicyTest {
 
     private DynamicRoutingPolicy dynamicRoutingPolicy;
@@ -62,7 +62,7 @@ public class DynamicRoutingPolicyTest {
     @Mock
     protected ExecutionContext executionContext;
 
-    @Before
+    @BeforeEach
     public void init() {
         dynamicRoutingPolicy = new DynamicRoutingPolicy(dynamicRoutingPolicyConfiguration);
     }
@@ -283,7 +283,7 @@ public class DynamicRoutingPolicyTest {
     }
 
     @Test
-    public void test_invalidPattern() throws IOException {
+    public void test_invalidPattern() {
         // Prepare policy configuration
         List<Rule> rules = new ArrayList<>();
         rules.add(new Rule("/ecom/($12[a-/search.*)", "http://host1/api/ecom"));
