@@ -391,4 +391,26 @@ public class DynamicRoutingPolicyTest {
         verify(policyChain).doNext(request, response);
         verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, "http://host1/%3Dbar");
     }
+
+    @Test
+    public void test_shouldDynamicRouting_singleMatchingRule_WithEncodedGroupAndEncodedPattern() {
+        // Prepare policy configuration
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule("(/%2377777)", "http://host1{#group[0]}"));
+
+        when(dynamicRoutingPolicyConfiguration.getRules()).thenReturn(rules);
+
+        // Prepare inbound request
+        when(request.pathInfo()).thenReturn("/%2377777");
+
+        // Prepare context
+        when(executionContext.getTemplateEngine()).thenReturn(TemplateEngine.templateEngine());
+
+        // Execute policy
+        dynamicRoutingPolicy.onRequest(request, response, executionContext, policyChain);
+
+        // Check results
+        verify(policyChain).doNext(request, response);
+        verify(executionContext).setAttribute(ExecutionContext.ATTR_REQUEST_ENDPOINT, "http://host1/%2377777");
+    }
 }

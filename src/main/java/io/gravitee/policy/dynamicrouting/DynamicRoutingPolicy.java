@@ -71,8 +71,8 @@ public class DynamicRoutingPolicy {
     @OnRequest
     public void onRequest(Request request, Response response, ExecutionContext executionContext, PolicyChain policyChain) {
         try {
-            String decodedSubPath = URLDecoder.decode(request.pathInfo(), Charset.defaultCharset().name());
             String originalSubPath = request.pathInfo();
+            String decodedSubPath = URLDecoder.decode(originalSubPath, Charset.defaultCharset().name());
 
             LOGGER.debug("Dynamic routing for path {}", originalSubPath);
             Rule rule = null;
@@ -82,7 +82,7 @@ public class DynamicRoutingPolicy {
                 for (final Rule r : configuration.getRules()) {
                     final String p = executionContext.getTemplateEngine().getValue(r.getPattern(), String.class);
                     pattern = Pattern.compile(p);
-                    if (pattern.matcher(decodedSubPath).matches()) {
+                    if (pattern.matcher(decodedSubPath).matches() || pattern.matcher(originalSubPath).matches()) {
                         rule = r;
                         break;
                     }
