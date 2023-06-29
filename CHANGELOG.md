@@ -1,3 +1,10 @@
+## [1.11.3](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.11.2...1.11.3) (2023-06-29)
+
+
+### Bug Fixes
+
+* match correctly a group when using an encoded rule pattern ([91e1b67](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/commit/91e1b673822163ff3ffc48e0e4bef686c9021729))
+
 ## [1.11.2](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.11.1...1.11.2) (2022-11-10)
 
 
