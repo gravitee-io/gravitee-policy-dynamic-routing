@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.11.3...1.12.0) (2023-07-05)
+
+
+### Features
+
+* define the execution phase of the policy in the plugin.properties ([e01c3c8](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/commit/e01c3c8372761ff41cba7e037725b2549c1cb038))
+
 ## [1.11.3](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.11.2...1.11.3) (2023-06-29)
 
 
