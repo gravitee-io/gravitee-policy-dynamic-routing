@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.12.0...1.12.1) (2023-07-20)
+
+
+### Bug Fixes
+
+* update policy description ([b1384ab](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/commit/b1384ab81e37dade627f1d46e8a08c5d2542678c))
+
 # [1.12.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.11.3...1.12.0) (2023-07-05)
 
 
