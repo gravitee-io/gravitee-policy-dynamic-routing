@@ -21,6 +21,14 @@ endif::[]
 
 |===
 
+== Compatibility with APIM
+
+|===
+| Plugin version | APIM version
+
+| Up to 1.x                   | All
+|===
+
 
 == Description
 The `dynamic-routing` policy is used to dispatch inbound calls to different targets / endpoints or to rewrite URIs.
