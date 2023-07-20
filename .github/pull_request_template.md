@@ -1,6 +1,6 @@
 **Issue**
 
-https://github.com/gravitee-io/issues/issues/XXXXX
+https://github.com/gravitee-io/gravitee-policy-data-logging-masking/pull/56
 
 **Description**
 
