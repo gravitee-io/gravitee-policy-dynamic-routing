@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.12.1...1.13.0) (2023-12-13)
+
+
+### Features
+
+* enable policy on REQUEST phase for message APIs ([0924bd3](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/commit/0924bd330c0c9e9e1980958e97c8c29e938a2c9c))
+
 ## [1.12.1](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.12.0...1.12.1) (2023-07-20)
 
 
