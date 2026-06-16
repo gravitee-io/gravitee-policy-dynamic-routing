@@ -26,7 +26,8 @@ endif::[]
 |===
 | Plugin version | APIM version
 
-| Up to 1.x                   | All
+| 1.x                         | Up to APIM 4.7
+| 2.x                         | APIM 4.8 and later
 |===
 
 
