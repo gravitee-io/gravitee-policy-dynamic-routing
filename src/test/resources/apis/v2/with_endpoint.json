@@ -4,7 +4,7 @@
     "gravitee": "2.0.0",
     "proxy": {
         "context_path": "/with_endpoint",
-        "groups" :[
+        "groups": [
             {
                 "name": "default-group",
                 "endpoints": [
