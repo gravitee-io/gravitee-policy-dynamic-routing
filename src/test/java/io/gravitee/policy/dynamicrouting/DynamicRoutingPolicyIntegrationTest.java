@@ -52,7 +52,7 @@ public class DynamicRoutingPolicyIntegrationTest extends AbstractPolicyTest<Dyna
     @Override
     public void configureApi(Api api) {
         super.configureApi(api);
-        api.setExecutionMode(ExecutionMode.JUPITER);
+        api.setExecutionMode(ExecutionMode.V4_EMULATION_ENGINE);
     }
 
     @BeforeAll
