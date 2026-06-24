@@ -1,3 +1,22 @@
+# [2.0.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.13.0...2.0.0) (2026-06-24)
+
+
+### Bug Fixes
+
+* replace removed ExecutionMode.JUPITER with V4_EMULATION_ENGINE ([7ecd373](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/commit/7ecd3732556c202ad04cedad54b02fde24d3fde8))
+
+
+### chore
+
+* **deps:** bump up gravitee:gravitee-parent to v23.5.0 ([63e9b28](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/commit/63e9b284fcb1caa9e7fde97b2cd41e7eebbba278))
+
+
+### BREAKING CHANGES
+
+* **deps:** gravitee-parent v23 compiles with JDK 21, so the minimum
+supported APIM version is now 4.8.x. Update the compatibility matrix
+accordingly (plugin 2.x targets APIM 4.8 and later).
+
 # [1.13.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.12.1...1.13.0) (2023-12-13)
 
 
