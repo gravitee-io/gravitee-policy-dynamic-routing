@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/2.0.0...2.1.0) (2026-06-24)
+
+
+### Features
+
+* enable policy for mcp proxy on request phase ([924ba85](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/commit/924ba85f68d3d9403b6cbcde486723812eb8f74b))
+
 # [2.0.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/1.13.0...2.0.0) (2026-06-24)
 
 
