@@ -24,12 +24,13 @@ endif::[]
 == Compatibility with APIM
 
 |===
-| Plugin version | APIM version
+| Plugin version | APIM version       | Java version
 
-| 1.x                         | Up to APIM 4.7
-| 2.x                         | APIM 4.8 and later
+| 1.x            | Up to APIM 4.7     | 11
+| 2.x            | APIM 4.8 and later | 21
 |===
 
+The *Java version* column is the bytecode level of the latest release of each line, which sets the minimum runtime able to load the artifact.
 
 == Description
 The `dynamic-routing` policy is used to dispatch inbound calls to different targets / endpoints or to rewrite URIs.
