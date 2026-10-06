@@ -1,3 +1,19 @@
+# [3.0.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/2.1.0...3.0.0) (2026-10-06)
+
+
+### Bug Fixes
+
+* **deps:** bump gravitee-apim to 4.9.36 ([089227a](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/commit/089227a39393cd7f36d32bfd4a0b50b1bb53b252))
+
+
+### BREAKING CHANGES
+
+* **deps:** the plugin now compiles against gravitee-gateway-api 4.0.5 (APIM 4.9.x) instead of
+3.13.1 (APIM 4.8.x). Deploy this version on APIM 4.9 or later; APIM 4.8 must stay on the 2.x plugin
+line.
+
+https://gravitee.atlassian.net/browse/BX-422
+
 # [2.1.0](https://github.com/gravitee-io/gravitee-policy-dynamic-routing/compare/2.0.0...2.1.0) (2026-06-24)
 
 
